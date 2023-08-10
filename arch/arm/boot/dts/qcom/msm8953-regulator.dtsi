@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -26,6 +26,12 @@
 
 	/* PM8953 S2 - VDD_CX supply */
 	rpm-regulator-smpa2 {
+		qcom,gx-retention; //Enable regulator retention level for IDLE modes
+		qcom,soft-start-enable = <0x1>; //enable soft start to start without current peaks that can damage device
+		qcom,hpm-enable = <0x1>; //enable high power mode
+		qcom,boost-current-limit = <14>; //3200mA maximum
+		qcom,ocp-enable = <1>; //enables over current protection
+		qcom,init-quiet-mode = <2>; //Regulator EMI noise reduction
 		status = "okay";
 		pm8953_s2_level: regulator-s2-level {
 			compatible = "qcom,rpm-smd-regulator";
@@ -60,6 +66,14 @@
 					<RPM_SMD_REGULATOR_LEVEL_TURBO>;
 			qcom,use-voltage-level;
 		};
+
+		cx_cdev: regulator-cx-cdev {
+			compatible = "qcom,regulator-cooling-device";
+			regulator-cdev-supply = <&pm8953_s2_floor_level>;
+			regulator-levels = <RPM_SMD_REGULATOR_LEVEL_NOM
+					RPM_SMD_REGULATOR_LEVEL_RETENTION>;
+			#cooling-cells = <2>;
+		};
 	};
 
 	rpm-regulator-smpa3 {
@@ -77,6 +91,7 @@
 		pm8953_s4: regulator-s4 {
 			regulator-min-microvolt = <1900000>;
 			regulator-max-microvolt = <2050000>;
+			qcom,init-quiet-mode = <2>; //Regulator EMI noise reduction
 			qcom,init-voltage = <1900000>;
 			status = "okay";
 		};
@@ -287,7 +302,7 @@
 	rpm-regulator-ldoa22 {
 		status = "okay";
 		pm8953_l22: regulator-l22 {
-			regulator-min-microvolt = <2800000>;
+			regulator-min-microvolt = <2250000>;
 			regulator-max-microvolt = <2850000>;
 			qcom,init-voltage = <2800000>;
 			status = "okay";
@@ -311,6 +326,7 @@
 		pm8953_s5: spm-regulator@2000 {
 			compatible = "qcom,spm-regulator";
 			reg = <0x2000 0x100>;
+			qcom,init-quiet-mode = <2>; //Regulator EMI noise reduction
 			regulator-name = "pm8953_s5";
 			regulator-min-microvolt = <400000>;
 			regulator-max-microvolt = <1140000>;
@@ -445,20 +461,20 @@
 
 				qcom,cpr-voltage-ceiling =
 					/* Speed bin 0 */
-					<715000  790000 860000 865000 920000
-					 990000 1065000 1065000 1065000>,
+					<605000  685000 735000 775000 815000
+					 855000 895000 950000 990000>,
 
 					/* Speed bin 2 */
-					<715000  790000 860000 865000 920000
-					 990000 1065000>,
+					<605000  685000 735000 775000 815000
+					 855000 895000>,
 
 					/* Speed bin 6 */
-					<715000  790000 860000 865000 920000
-					 990000 1065000>,
+					<605000  685000 735000 775000 815000
+					 855000 895000>,
 
 					/* Speed bin 7 */
-					<715000  790000 860000 865000 920000
-					 990000 1065000 1065000 1065000>;
+					<605000  685000 735000 775000 815000
+					 855000 895000 950000 990000>;
 
 				qcom,cpr-voltage-floor =
 					/* Speed bin 0 */
