@@ -418,7 +418,7 @@ enum wake_reason {
 #define	HVDCP_PULSING_VOTER		"HVDCP_PULSING_VOTER"
 
 /* fg cc workaround */
-#if defined(CONFIG_MACH_XIAOMI_C6)
+#if defined(CONFIG_MACH_XIAOMI_MIDO)
 #define NO_CHARGE_COUNTER
 #endif
 
@@ -931,8 +931,8 @@ static int get_prop_batt_status(struct smbchg_chip *chip)
 	u8 reg = 0, chg_type;
 	bool charger_present, chg_inhibit;
 
-	charger_present = is_usb_present(chip) | is_dc_present(chip) |
-			  chip->hvdcp_3_det_ignore_uv;
+	charger_present = (int)is_usb_present(chip) | (int)is_dc_present(chip) |
+            chip->hvdcp_3_det_ignore_uv;
 	if (!charger_present)
 		return POWER_SUPPLY_STATUS_DISCHARGING;
 
