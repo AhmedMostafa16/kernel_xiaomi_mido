@@ -49,15 +49,6 @@ config IOSCHED_MAPLE
 	  simple tasks should improve in performance. Maple also uses hooks for the
 	  powersuspend driver to increase expirations when power is suspended to decrease workload.
 
-config IOSCHED_ROW
-	  tristate "ROW I/O scheduler"
-	 ---help---
-	   The ROW I/O scheduler gives priority to READ requests over the
-	   WRITE requests when dispatching, without starving WRITE requests.
-  	   Requests are kept in priority queues. Dispatching is done in a RR
-  	   manner when the dispatch quantum for each queue is calculated
-  	   according to queue priority.
-  	   Most suitable for mobile devices.
 
 
 config CFQ_GROUP_IOSCHED
@@ -118,16 +109,6 @@ choice
 	config DEFAULT_MAPLE
 	    bool "maple" if IOSCHED_MAPLE=y
 
-	config DEFAULT_ROW
-		bool "ROW" if IOSCHED_ROW=y
-		---help---
-			The ROW I/O scheduler gives priority to READ requests
-			over the WRITE requests when dispatching, without starving
-			WRITE requests. Requests are kept in priority queues.
-			Dispatching is done in a RR manner when the dispatch quantum
-			for each queue is defined according to queue priority.
-			Most suitable for mobile devices. 
-
 
 
 endchoice
@@ -140,7 +121,6 @@ config DEFAULT_IOSCHED
 	default "noop" if DEFAULT_NOOP
 	default "anxiety" if DEFAULT_ANXIETY
 	default "maple" if DEFAULT_MAPLE
-	default "row" if DEFAULT_ROW
 
 endmenu
 
